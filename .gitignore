@@ -1,5 +1,6 @@
 # Downloadable files
-/node_modules
+app/node_modules
+api/node_modules
 
 # Windows image file caches
 Thumbs.db
