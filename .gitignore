@@ -1,9 +1,11 @@
 # Generated files
 npm-debug.log
 
+# Database files
+api/data
+
 # Downloadable files
-app/node_modules
-api/node_modules
+node_modules
 
 # Windows image file caches
 Thumbs.db

@@ -11,17 +11,16 @@ var script = DOM.script;
 // Require Express for serving content
 var express = require('express');
 var app = express();
+var httpProxy = require('http-proxy');
 var path = require('path')
 require('babel-register');
 
-// Default data
-// TODO replace with data from MongoDB
-var data = [
-  {title: 'Shopping', detail: "Shopping detail"},
-  {title: 'Hair cut', detail: "Hair cut detail"},
-  {title: 'Ronny', detail: "Do Ronny"},
-  {title: 'Umm buy oranges', detail: "Imperial Mandarin"}
-];
+// Defining a proxy to point at the API server
+const apiURL = 'http://localhost:3030/api/objectives';
+const proxy = httpProxy.createProxyServer({
+  target: apiURL,
+  ws: true
+});
 
 // Set the static path for the web server
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,13 +33,14 @@ app.set('port', (process.argv[2] || 3000));
 // import statements to work..
 var ObjectiveList = require('./src/components/ObjectiveList').default;
 
+app.use('/api', (req, res) => {
+  proxy.web(req, res, {target: apiURL});
+});
+
 // Add default server response
 app.get('/', (req, res) => {
-  // Stringify the default data
-  var initialData = JSON.stringify(data);
-
   // Create a React Element with data
-  var objectiveList = React.createElement(ObjectiveList, {data: data});
+  var objectiveList = React.createElement(ObjectiveList, {url: 'http://localhost:3000/api'});
 
   // Turn React Element to a string
   var markup = ReactDOMServer.renderToString(objectiveList);
@@ -52,11 +52,6 @@ app.get('/', (req, res) => {
     body(
       null,
       div({id: 'objectiveList', dangerouslySetInnerHTML: {__html: markup}}),
-      script({
-        id: 'initial-data',
-        type: 'text/plain',
-        'data-json': initialData
-      }),
       script({src: '/js/bundle.js'})
     )
   );
@@ -66,5 +61,6 @@ app.get('/', (req, res) => {
 });
 
 // Start the Express web server
-app.listen(app.get('port'));
-console.log('The magic happens on port ' + app.get('port'));
+app.listen(app.get('port'), function() {
+  console.log('App server started: http://localhost:' + app.get('port') + '/');
+});

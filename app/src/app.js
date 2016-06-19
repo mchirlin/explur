@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ObjectiveList from './components/ObjectiveList';
 
-// Populate inital data
-let data = JSON.parse(document.getElementById('initial-data').getAttribute('data-json'));
-
+const apiURL = 'http://localhost:3000/api';
 // Render the ObjectiveList
 ReactDOM.render(
-   <ObjectiveList data={data}/>,
+   <ObjectiveList url={apiURL}/>,
    document.getElementById('objectiveList')
 );

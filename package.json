@@ -1,16 +1,18 @@
 {
-  "name": "hexplore-app",
+  "name": "hexplore",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
+  "main": "app/src/app.js",
   "scripts": {
-    "start": "node server.js",
-    "watch:js": "watchify --extension=.jsx --extension=.js src/app.js -o public/js/bundle.js -v",
-    "watch:css": "node-sass -w src/css/app.scss public/css/app.css",
-    "watch": "npm run watch:js",
-    "build:js": "browserify --extension=.jsx --extension=.js src/app.js -o public/js/bundle.js",
-    "build:css": "node-sass src/css/app.scss public/css/app.css",
-    "build": "npm run build:js"
+    "start": "npm-run-all --parallel start-app start-api",
+    "start-app": "node app/server.js",
+    "start-api": "node api/server.js",
+    "watch-app:js": "watchify --extension=.jsx --extension=.js app/src/app.js -o app/public/js/bundle.js -v",
+    "watch-app:css": "node-sass -w src/css/app.scss public/css/app.css",
+    "watch-app": "npm run watch-app:js",
+    "build-app:js": "browserify --extension=.jsx --extension=.js app/src/app.js -o app/public/js/bundle.js",
+    "build-app:css": "node-sass src/css/app.scss public/css/app.css",
+    "build-app": "npm run build-app:js"
   },
   "browserify": {
     "debug": true,
@@ -35,8 +37,11 @@
   "dependencies": {
     "express": "^4.13.4",
     "flux": "^2.1.1",
+    "http-proxy": "^1.14.0",
+    "mongodb": "^2.1.18",
     "react": "^15.1.0",
-    "react-dom": "^15.1.0"
+    "react-dom": "^15.1.0",
+    "request": "^2.72.0"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
