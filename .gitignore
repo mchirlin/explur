@@ -1,3 +1,6 @@
+# Generated files
+npm-debug.log
+
 # Downloadable files
 app/node_modules
 api/node_modules
